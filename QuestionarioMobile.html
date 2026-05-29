@@ -784,16 +784,17 @@ body::before{
 #completion{padding-bottom:max(60px,env(safe-area-inset-bottom));}
 
 @media (max-width: 640px) {
+  .likert-row{flex-wrap:wrap;}
   .likert-row::after{
     content:'Tocca un numero per rispondere';
-    display:block;width:100%;
+    flex-basis:100%;          /* va a capo sotto i numeri */
+    display:block;
     font-size:.6rem;color:var(--text3);
-    text-align:center;margin-top:6px;
+    text-align:center;margin-top:8px;
     letter-spacing:.3px;font-style:italic;
-    animation:fadeUp .5s ease both .4s;
     opacity:.7;
   }
-  /* Ma solo se non ancora risposto (via :has — progressive enhancement) */
+  /* Scompare dopo la prima selezione */
   .q-card:has(.l-opt[class*="sel"]) .likert-row::after{
     display:none;
   }
