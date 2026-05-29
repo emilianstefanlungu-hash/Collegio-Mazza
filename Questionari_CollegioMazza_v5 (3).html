@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Collegio Mazza — Valutazione</title>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700;800;900&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* === Collegio Mazza Brand Colors === */
+  --blue:#1460A8;
+  --blue2:#1B72C0;
+  --blue-light:rgba(20,96,168,.10);
+  --blue-glow:rgba(20,96,168,.28);
+  --blue-dark:#0e4a84;
+
+  --orange:#F5821F;
+  --orange2:#e87010;
+  --orange-light:rgba(245,130,31,.10);
+  --orange-glow:rgba(245,130,31,.30);
+
+  --red:#d94040;
+  --red-light:rgba(217,64,64,.10);
+
+  /* === Light theme surfaces === */
+  --bg:#f4f6fa;
+  --surface:#ffffff;
+  --surface2:#eef1f7;
+  --surface3:#e4e8f2;
+
+  /* === Text === */
+  --text:#0e1c33;
+  --text2:#3a4a62;
+  --text3:#7a8ba8;
+
+  /* === Borders === */
+  --border:rgba(20,96,168,.12);
+  --border2:rgba(20,96,168,.22);
+
+  --white:#ffffff;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;font-size:16px;}
+
+body{
+  font-family:'Raleway',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* Subtle geometric background pattern */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    radial-gradient(circle at 0% 0%, rgba(20,96,168,.06) 0%, transparent 50%),
+    radial-gradient(circle at 100% 100%, rgba(245,130,31,.06) 0%, transparent 50%);
+}
+
+.app{position:relative;z-index:1;min-height:100vh;}
+
+/* ── TOPBAR ── */
+.topbar{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 40px;height:64px;
+  background:rgba(255,255,255,.92);
+  border-bottom:1px solid var(--border);
+  backdrop-filter:blur(20px);
+  box-shadow:0 1px 16px rgba(20,96,168,.08);
+}
+.topbar-logo{
+  display:flex;align-items:center;gap:14px;text-decoration:none;
+}
+.logo-svg{height:36px;width:auto;display:block;}
+.topbar-badge{
+  font-size:.68rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--blue2);padding:6px 14px;
+  border:1.5px solid var(--border2);border-radius:100px;
+  background:var(--blue-light);
+}
+.topbar-right{display:flex;align-items:center;gap:12px;}
+.btn-back-home{
+  display:none;
+  align-items:center;gap:7px;
+  padding:8px 16px;border-radius:100px;
+  background:transparent;border:1.5px solid var(--border2);
+  color:var(--text2);font-family:'Raleway',sans-serif;
+  font-size:.72rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  cursor:pointer;transition:all .2s;white-space:nowrap;
+}
+.btn-back-home:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-light);}
+
+/* ── CONFIRM MODAL ── */
+.modal-overlay{
+  display:none;position:fixed;inset:0;z-index:200;
+  background:rgba(14,28,51,.45);
+  backdrop-filter:blur(6px);
+  align-items:center;justify-content:center;
+  animation:fadeIn .18s ease;
+}
+.modal-overlay.open{display:flex;}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal-box{
+  background:var(--surface);
+  border:1.5px solid var(--border2);
+  border-radius:18px;
+  padding:36px 32px 28px;
+  max-width:380px;width:90%;
+  text-align:center;
+  box-shadow:0 20px 60px rgba(14,28,51,.2);
+  animation:scaleIn .22s cubic-bezier(.34,1.56,.64,1);
+}
+.modal-icon{font-size:2rem;margin-bottom:12px;}
+.modal-title{font-family:'Lora',serif;font-size:1.25rem;font-weight:600;color:var(--blue);margin-bottom:8px;}
+.modal-desc{font-size:.85rem;color:var(--text2);line-height:1.6;margin-bottom:24px;}
+.modal-actions{display:flex;gap:10px;justify-content:center;}
+.modal-cancel{
+  padding:10px 22px;border-radius:100px;
+  background:transparent;border:1.5px solid var(--border2);
+  color:var(--text2);font-family:'Raleway',sans-serif;
+  font-size:.78rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  cursor:pointer;transition:all .2s;
+}
+.modal-cancel:hover{border-color:var(--text3);color:var(--text);}
+.modal-confirm{
+  padding:10px 22px;border-radius:100px;
+  background:var(--blue);border:none;
+  color:#fff;font-family:'Raleway',sans-serif;
+  font-size:.78rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  cursor:pointer;transition:all .2s;
+  box-shadow:0 4px 14px var(--blue-glow);
+}
+.modal-confirm:hover{background:var(--orange);box-shadow:0 4px 14px var(--orange-glow);}
+
+/* ── LANDING ── */
+#landing{
+  min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:100px 20px 60px;
+  animation:fadeUp .8s cubic-bezier(.16,1,.3,1) both;
+}
+
+.landing-eyebrow{
+  font-size:.7rem;letter-spacing:4px;text-transform:uppercase;
+  color:var(--orange);font-weight:700;margin-bottom:24px;
+  display:flex;align-items:center;gap:12px;
+}
+.landing-eyebrow::before,.landing-eyebrow::after{
+  content:'';flex:1;height:1px;background:var(--border2);max-width:60px;
+}
+
+.landing-headline{
+  font-family:'Lora',serif;
+  font-size:clamp(2.4rem,5vw,3.8rem);
+  font-weight:400;line-height:1.15;
+  text-align:center;color:var(--blue);
+  max-width:640px;margin-bottom:16px;
+}
+.landing-headline em{
+  font-style:italic;color:var(--orange);
+}
+
+.landing-sub{
+  font-size:.95rem;color:var(--text2);line-height:1.7;
+  text-align:center;max-width:480px;margin-bottom:56px;font-weight:400;
+}
+
+/* ── QUIZ CARDS ── */
+.quiz-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:12px;width:100%;max-width:880px;margin-bottom:36px;
+}
+.quiz-card{
+  display:flex;align-items:center;gap:18px;
+  padding:20px 22px;
+  background:var(--surface);
+  border:1.5px solid var(--border);
+  border-radius:14px;cursor:pointer;
+  transition:all .22s cubic-bezier(.4,0,.2,1);
+  text-align:left;
+  box-shadow:0 2px 8px rgba(20,96,168,.06);
+}
+.quiz-card:hover{
+  border-color:var(--blue2);
+  transform:translateY(-3px);
+  box-shadow:0 8px 28px rgba(20,96,168,.14);
+}
+.quiz-card.active{
+  border-color:var(--blue);
+  background:var(--blue-light);
+  box-shadow:0 0 0 1px var(--blue), 0 8px 28px rgba(20,96,168,.18);
+}
+.quiz-card.active .qc-icon{background:var(--blue);}
+.qc-icon{
+  width:44px;height:44px;border-radius:10px;
+  background:var(--surface2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.3rem;flex-shrink:0;
+  transition:background .22s;
+}
+.qc-body{flex:1;min-width:0;}
+.qc-name{font-size:.92rem;font-weight:700;color:var(--text);margin-bottom:3px;}
+.qc-desc{font-size:.75rem;color:var(--text3);line-height:1.4;}
+.qc-time{
+  font-size:.68rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  color:var(--blue2);margin-top:6px;display:block;
+}
+.qc-check{
+  width:22px;height:22px;border-radius:50%;
+  border:2px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;transition:all .22s;
+  font-size:.7rem;color:transparent;
+}
+.quiz-card.active .qc-check{
+  background:var(--blue);border-color:var(--blue);color:#fff;
+}
+
+.start-btn{
+  padding:15px 52px;
+  background:var(--blue);
+  color:#fff;
+  border:none;border-radius:10px;cursor:pointer;
+  font-family:'Raleway',sans-serif;font-size:.88rem;
+  font-weight:800;letter-spacing:2px;text-transform:uppercase;
+  transition:all .22s ease;
+  box-shadow:0 6px 20px var(--blue-glow);
+}
+.start-btn:hover:not(:disabled){
+  background:var(--orange);
+  box-shadow:0 10px 28px var(--orange-glow);
+  transform:translateY(-2px);
+}
+.start-btn:disabled{opacity:.3;cursor:not-allowed;}
+
+/* ── SURVEY ── */
+#survey{
+  display:none;padding-top:80px;min-height:100vh;
+  width:100%;max-width:720px;margin:0 auto;padding-left:24px;padding-right:24px;
+  animation:fadeUp .5s cubic-bezier(.16,1,.3,1) both;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+.prog-header{padding:32px 0 28px;}
+.prog-meta{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:12px;
+}
+.prog-label{font-size:.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3);}
+.prog-fraction{font-size:.72rem;font-weight:700;color:var(--blue2);}
+.prog-bar{height:3px;background:var(--surface3);border-radius:3px;overflow:hidden;}
+.prog-fill{
+  height:100%;background:linear-gradient(90deg,var(--blue),var(--blue2));border-radius:3px;
+  transition:width .6s cubic-bezier(.4,0,.2,1);
+  box-shadow:0 0 10px var(--blue-glow);
+}
+
+.sec-head{margin-bottom:28px;}
+.sec-eyebrow{
+  font-size:.68rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;
+  color:var(--orange);margin-bottom:10px;
+}
+.sec-title{
+  font-family:'Lora',serif;
+  font-size:1.6rem;font-weight:600;color:var(--blue);line-height:1.2;
+}
+
+.staff-badge{
+  display:flex;align-items:center;gap:16px;
+  padding:16px 20px;border-radius:12px;
+  border:1.5px solid var(--border);
+  background:var(--surface);
+  margin-bottom:20px;
+  box-shadow:0 2px 8px rgba(20,96,168,.06);
+}
+.sb-icon{font-size:1.8rem;}
+.sb-role{font-size:.88rem;font-weight:700;color:var(--text);}
+.sb-desc{font-size:.75rem;color:var(--text3);margin-top:2px;}
+
+.info-note{
+  display:flex;gap:12px;align-items:flex-start;
+  background:var(--orange-light);border:1px solid rgba(245,130,31,.25);
+  border-radius:8px;padding:12px 16px;
+  color:var(--text2);font-size:.8rem;line-height:1.5;
+  margin-bottom:20px;
+}
+
+/* ── QUESTION CARDS ── */
+.q-card{
+  background:var(--surface);
+  border:1.5px solid var(--border);
+  border-radius:14px;padding:24px;
+  margin-bottom:14px;
+  transition:border-color .2s, box-shadow .2s;
+  animation:fadeUp .3s ease both;
+  box-shadow:0 2px 8px rgba(20,96,168,.05);
+}
+.q-card:focus-within{
+  border-color:var(--blue2);
+  box-shadow:0 4px 16px rgba(20,96,168,.12);
+}
+.q-num{
+  font-size:.65rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--text3);margin-bottom:10px;
+}
+.q-text{
+  font-size:.95rem;font-weight:600;color:var(--text);
+  line-height:1.55;margin-bottom:20px;
+}
+.q-card.unanswered{border-color:rgba(217,64,64,.5);animation:shake .35s ease;}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+/* ── LIKERT ── */
+.likert-row{display:flex;gap:7px;}
+.l-opt{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;
+  padding:12px 4px;border-radius:10px;cursor:pointer;
+  border:1.5px solid var(--border);background:transparent;
+  transition:all .18s ease;user-select:none;
+}
+.l-opt:hover{border-color:var(--blue2);background:var(--blue-light);}
+.l-num{font-size:1.1rem;font-weight:800;color:var(--text3);transition:color .18s;}
+.l-lbl{font-size:.6rem;text-align:center;color:var(--text3);line-height:1.2;transition:color .18s;}
+
+.l-opt.sel-1{background:var(--red-light);border-color:var(--red);}
+.l-opt.sel-1 .l-num{color:var(--red);}
+.l-opt.sel-2{background:rgba(245,130,31,.08);border-color:var(--orange);}
+.l-opt.sel-2 .l-num{color:var(--orange);}
+.l-opt.sel-3{background:var(--surface2);border-color:var(--text3);}
+.l-opt.sel-3 .l-num{color:var(--text2);}
+.l-opt.sel-4{background:var(--blue-light);border-color:var(--blue);}
+.l-opt.sel-4 .l-num{color:var(--blue);}
+.l-opt.sel-5{background:rgba(20,96,168,.16);border-color:var(--blue2);}
+.l-opt.sel-5 .l-num{color:var(--blue2);}
+.l-opt[class*="sel-"] .l-lbl{color:var(--text2);}
+
+/* ── NPS ── */
+.nps-row{display:flex;gap:5px;flex-wrap:wrap;}
+.nps-opt{
+  flex:1;min-width:36px;
+  display:flex;align-items:center;justify-content:center;
+  padding:10px 4px;border-radius:8px;cursor:pointer;
+  border:1.5px solid var(--border);background:transparent;
+  font-size:.9rem;font-weight:800;color:var(--text3);
+  transition:all .18s ease;user-select:none;
+}
+.nps-opt:hover{border-color:var(--blue2);color:var(--blue);}
+.nps-opt.nsel{transform:translateY(-2px);}
+.nps-opt.nsel-low{background:var(--red-light);border-color:var(--red);color:var(--red);}
+.nps-opt.nsel-mid{background:var(--orange-light);border-color:var(--orange);color:var(--orange2);}
+.nps-opt.nsel-high{background:rgba(20,96,168,.14);border-color:var(--blue2);color:var(--blue);}
+.nps-labels{display:flex;justify-content:space-between;margin-top:8px;
+  font-size:.68rem;color:var(--text3);font-weight:500;}
+
+/* ── MC ── */
+.mc-row{display:flex;flex-wrap:wrap;gap:8px;}
+.mc-opt{
+  padding:9px 18px;border-radius:100px;cursor:pointer;
+  border:1.5px solid var(--border);background:transparent;
+  color:var(--text2);font-size:.82rem;font-weight:600;
+  transition:all .18s ease;user-select:none;
+}
+.mc-opt:hover{border-color:var(--blue2);color:var(--blue);}
+.mc-opt.msel{
+  background:var(--blue-light);border-color:var(--blue);color:var(--blue);font-weight:700;
+}
+
+/* ── YES/NO ── */
+.yn-row{display:flex;gap:10px;flex-wrap:wrap;}
+.yn-opt{
+  flex:1;min-width:120px;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:13px;border-radius:10px;cursor:pointer;
+  border:1.5px solid var(--border);background:transparent;
+  font-size:.85rem;font-weight:700;color:var(--text3);
+  transition:all .22s ease;user-select:none;
+}
+.yn-opt:hover{border-color:var(--blue2);color:var(--blue);}
+.yn-si.ysel{background:rgba(20,96,168,.14);border-color:var(--blue);color:var(--blue);}
+.yn-no.ysel{background:var(--red-light);border-color:var(--red);color:var(--red);}
+.yn-na.ysel{background:var(--surface2);border-color:var(--text3);color:var(--text2);}
+
+/* ── NAV BAR ── */
+.nav-bar{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:24px 0 48px;gap:12px;
+}
+.btn-prev{
+  padding:12px 28px;border-radius:100px;
+  background:transparent;border:1.5px solid var(--border2);
+  color:var(--text3);font-family:'Raleway',sans-serif;font-size:.8rem;
+  font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  cursor:pointer;transition:all .2s;
+}
+.btn-prev:hover{border-color:var(--blue2);color:var(--blue);}
+.btn-next{
+  padding:13px 40px;border-radius:100px;
+  background:var(--blue);border:none;
+  color:#fff;font-family:'Raleway',sans-serif;font-size:.8rem;
+  font-weight:800;letter-spacing:1.5px;text-transform:uppercase;
+  cursor:pointer;transition:all .22s;
+  box-shadow:0 4px 16px var(--blue-glow);
+}
+.btn-next:hover{background:var(--orange);box-shadow:0 6px 24px var(--orange-glow);}
+.hint{
+  text-align:center;font-size:.75rem;color:var(--red);
+  min-height:16px;margin-top:-8px;margin-bottom:8px;font-weight:600;
+}
+
+/* ── COMPLETION ── */
+#completion{
+  display:none;min-height:100vh;
+  flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:100px 24px 60px;
+  animation:fadeUp .8s cubic-bezier(.16,1,.3,1) both;
+}
+.comp-mark{
+  width:72px;height:72px;border-radius:50%;
+  background:var(--blue-light);border:2px solid var(--blue);
+  display:flex;align-items:center;justify-content:center;
+  font-size:2rem;margin:0 auto 32px;color:var(--blue);
+  animation:scaleIn .6s cubic-bezier(.34,1.56,.64,1) both .3s;
+}
+@keyframes scaleIn{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+.comp-eyebrow{
+  font-size:.68rem;letter-spacing:4px;text-transform:uppercase;
+  color:var(--orange);font-weight:700;margin-bottom:16px;
+}
+.comp-title{
+  font-family:'Lora',serif;
+  font-size:clamp(2rem,4vw,3rem);font-weight:600;
+  color:var(--blue);margin-bottom:16px;line-height:1.15;
+}
+.comp-sub{color:var(--text2);font-size:.95rem;line-height:1.7;max-width:460px;margin:0 auto 40px;}
+.comp-stats{
+  display:flex;gap:1px;border:1.5px solid var(--border);border-radius:14px;
+  overflow:hidden;margin-bottom:40px;
+  box-shadow:0 4px 16px rgba(20,96,168,.08);
+}
+.stat-item{
+  flex:1;padding:20px;background:var(--surface);
+  border-right:1px solid var(--border);
+}
+.stat-item:last-child{border-right:none;}
+.stat-n{font-family:'Lora',serif;font-size:2rem;font-weight:600;color:var(--blue);}
+.stat-l{font-size:.68rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-top:4px;}
+.btn-restart{
+  padding:13px 40px;border-radius:100px;
+  background:transparent;border:1.5px solid var(--border2);
+  color:var(--text2);font-family:'Raleway',sans-serif;
+  font-size:.8rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  cursor:pointer;transition:all .22s;
+}
+.btn-restart:hover{border-color:var(--blue);color:var(--blue);}
+
+/* ── NA button (non ho interagito) ── */
+.na-row{margin-top:10px;}
+.na-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:7px 16px;border-radius:100px;cursor:pointer;
+  border:1.5px dashed var(--border2);background:transparent;
+  color:var(--text3);font-family:'Raleway',sans-serif;
+  font-size:.75rem;font-weight:700;letter-spacing:.5px;
+  transition:all .18s ease;user-select:none;
+}
+.na-btn:hover{border-color:var(--text3);color:var(--text2);}
+.na-btn.na-sel{
+  border-style:solid;
+  border-color:var(--text3);
+  background:var(--surface2);
+  color:var(--text2);
+}
+
+/* ── Group label ── */
+.quiz-grid{grid-template-columns:1fr;}
+.group-label{
+  grid-column:1/-1;
+  padding:8px 4px 4px;
+  font-size:.68rem;font-weight:800;letter-spacing:3px;text-transform:uppercase;
+  color:var(--text3);border-bottom:1px solid var(--border);
+  margin-top:8px;
+}
+.group-label:first-child{margin-top:0;}
+.qc-tags{font-size:.68rem;color:var(--blue2);font-weight:600;margin-top:3px;opacity:.7;}
+
+/* ── Open text ── */
+.q-card.q-text-card{
+  border:2px solid var(--orange);
+  background:linear-gradient(135deg,rgba(245,130,31,.07) 0%,rgba(245,130,31,.03) 100%);
+  box-shadow:0 4px 20px rgba(245,130,31,.12);
+  padding:28px 26px 22px;
+}
+.open-top{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  gap:16px;margin-bottom:14px;
+}
+.open-icon-wrap{
+  flex-shrink:0;
+  width:44px;height:44px;border-radius:12px;
+  background:rgba(245,130,31,.15);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.3rem;
+}
+.open-header{flex:1;}
+.open-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:3px 10px;border-radius:100px;
+  background:rgba(245,130,31,.15);
+  border:1px solid rgba(245,130,31,.35);
+  font-size:.62rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--orange2);margin-bottom:8px;
+}
+.open-prompt{
+  font-family:'Lora',serif;
+  font-size:1.02rem;font-weight:600;color:var(--text);
+  line-height:1.5;
+}
+.open-wrap{display:flex;flex-direction:column;gap:8px;}
+.open-ta{
+  width:100%;min-height:110px;resize:none;
+  background:rgba(255,255,255,.75);
+  border:1.5px solid rgba(245,130,31,.3);border-radius:12px;
+  padding:14px 16px;
+  font-family:'Raleway',sans-serif;font-size:.9rem;color:var(--text);
+  line-height:1.65;transition:border-color .2s,box-shadow .2s,background .2s;outline:none;
+}
+.open-ta::placeholder{color:var(--text3);font-style:italic;}
+.open-ta:focus{
+  border-color:var(--orange);
+  background:#fff;
+  box-shadow:0 0 0 3px rgba(245,130,31,.15);
+}
+.open-footer{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-top:6px;
+}
+.open-hint{font-size:.72rem;color:var(--text3);font-style:italic;}
+.open-counter{font-size:.68rem;font-weight:700;color:var(--text3);letter-spacing:.5px;}
+</style>
+</head>
+<body>
+<div class="app">
+
+<nav class="topbar">
+  <div class="topbar-logo">
+    <svg class="logo-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 266.46 65.2" xml:space="preserve">
+      <style>.st0{fill:#009FE3;}.st1{fill:#005AA2;}</style>
+      <g>
+        <path class="st0" d="M0.52,44.33c0-1.41,0.07-2.63,0.21-3.66c0.14-1.02,0.44-1.92,0.91-2.71c0.47-0.78,1.16-1.39,2.06-1.84c0.91-0.44,2.11-0.66,3.6-0.66c1.24,0,2.28,0.19,3.12,0.57c0.85,0.38,1.51,0.87,1.99,1.46c0.48,0.59,0.81,1.2,1,1.82c0.19,0.62,0.28,1.21,0.28,1.76c0,0.86-0.21,1.51-0.62,1.95c-0.42,0.44-0.97,0.66-1.65,0.66c-0.78,0-1.37-0.2-1.76-0.61c-0.39-0.4-0.59-1.07-0.59-2.01c0-0.63-0.16-1.12-0.47-1.46c-0.32-0.34-0.74-0.51-1.27-0.51c-0.83,0-1.37,0.38-1.61,1.16c-0.24,0.77-0.36,1.99-0.36,3.65v4.55c0,1.72,0.15,2.95,0.44,3.71c0.29,0.76,0.8,1.14,1.53,1.14c0.5,0,0.91-0.16,1.23-0.47c0.32-0.32,0.49-0.85,0.51-1.61c0.05-1.26,0.26-2.13,0.62-2.61c0.37-0.48,0.94-0.72,1.72-0.72c0.68,0,1.23,0.24,1.65,0.72c0.42,0.48,0.62,1.14,0.62,1.97c0,0.63-0.09,1.3-0.27,1.99c-0.18,0.69-0.5,1.38-0.97,2.04c-0.47,0.67-1.13,1.22-1.99,1.67c-0.86,0.44-1.92,0.66-3.18,0.66c-1.49,0-2.69-0.22-3.6-0.66c-0.91-0.44-1.6-1.06-2.06-1.86c-0.47-0.8-0.77-1.7-0.91-2.71c-0.14-1.01-0.21-2.22-0.21-3.64V44.33z"/>
+        <path class="st0" d="M16.51,43.42c0-1.16,0.11-2.22,0.32-3.16c0.21-0.95,0.59-1.78,1.12-2.5c0.53-0.72,1.25-1.28,2.16-1.69c0.91-0.4,2.03-0.61,3.37-0.61c1.34,0,2.46,0.2,3.37,0.61c0.91,0.4,1.63,0.97,2.16,1.69c0.53,0.72,0.9,1.55,1.12,2.5c0.21,0.95,0.32,2,0.32,3.16v5.57c0,1.16-0.11,2.21-0.32,3.16c-0.21,0.95-0.59,1.78-1.12,2.5c-0.53,0.72-1.25,1.28-2.16,1.69c-0.91,0.4-2.03,0.61-3.37,0.61c-1.34,0-2.46-0.2-3.37-0.61c-0.91-0.4-1.63-0.97-2.16-1.69c-0.53-0.72-0.9-1.55-1.12-2.5c-0.21-0.95-0.32-2-0.32-3.16V43.42z M21.35,48.61c0,1.84,0.16,3.09,0.47,3.73c0.32,0.64,0.86,0.97,1.65,0.97c0.78,0,1.33-0.32,1.65-0.97c0.32-0.64,0.47-1.89,0.47-3.73v-4.89c0-1.77-0.17-2.98-0.51-3.64c-0.34-0.66-0.88-0.98-1.61-0.98c-0.73,0-1.27,0.33-1.61,0.98c-0.34,0.66-0.51,1.87-0.51,3.64V48.61z"/>
+        <path class="st0" d="M34.12,31.45c0-0.91,0.2-1.6,0.61-2.06c0.4-0.47,0.97-0.7,1.7-0.7c0.73,0,1.3,0.23,1.7,0.7c0.4,0.47,0.61,1.16,0.61,2.06v22.73c0,0.91-0.2,1.6-0.61,2.06c-0.4,0.47-0.97,0.7-1.7,0.7c-0.73,0-1.3-0.23-1.7-0.7c-0.4-0.47-0.61-1.16-0.61-2.06V31.45z"/>
+        <path class="st0" d="M43.21,31.45c0-0.91,0.2-1.6,0.61-2.06c0.4-0.47,0.97-0.7,1.7-0.7c0.73,0,1.3,0.23,1.7,0.7c0.4,0.47,0.61,1.16,0.61,2.06v22.73c0,0.91-0.2,1.6-0.61,2.06c-0.4,0.47-0.97,0.7-1.7,0.7c-0.73,0-1.3-0.23-1.7-0.7c-0.4-0.47-0.61-1.16-0.61-2.06V31.45z"/>
+        <path class="st0" d="M51.5,44.06c0-1.49,0.08-2.73,0.25-3.73c0.16-1,0.49-1.86,0.97-2.59c0.48-0.73,1.19-1.29,2.14-1.69c0.95-0.39,2.18-0.59,3.69-0.59c2.35,0,4.01,0.65,4.98,1.95c0.97,1.3,1.46,3.34,1.46,6.12c0,1.11-0.16,1.94-0.49,2.48c-0.33,0.54-1.02,0.81-2.08,0.81h-6.06v2.08c0,1.46,0.13,2.56,0.4,3.29c0.27,0.73,0.83,1.1,1.69,1.1c0.48,0,0.89-0.21,1.23-0.64c0.34-0.43,0.52-0.92,0.55-1.48c0.02-0.93,0.23-1.58,0.62-1.93c0.39-0.35,0.94-0.53,1.65-0.53c0.76,0,1.34,0.16,1.74,0.49c0.4,0.33,0.61,0.92,0.61,1.78c0,1.84-0.57,3.29-1.72,4.36c-1.15,1.06-2.67,1.59-4.56,1.59c-1.51,0-2.75-0.2-3.69-0.59c-0.95-0.39-1.66-0.95-2.14-1.69c-0.48-0.73-0.8-1.6-0.97-2.59c-0.16-1-0.25-2.24-0.25-3.73V44.06z M60.37,43.57v-1.7c0-0.86-0.16-1.53-0.47-2.03c-0.32-0.49-0.83-0.74-1.53-0.74c-0.71,0-1.22,0.25-1.53,0.74c-0.32,0.49-0.47,1.17-0.47,2.03v1.7H60.37z"/>
+        <path class="st0" d="M67.79,43.15c0-1.06,0.08-2.04,0.25-2.94c0.16-0.9,0.43-1.7,0.8-2.42c0.37-0.72,0.87-1.29,1.52-1.7c0.64-0.42,1.43-0.62,2.37-0.62c0.93,0,1.79,0.25,2.56,0.74c0.77,0.49,1.33,1.17,1.69,2.03h0.08c0-1.84,0.76-2.76,2.27-2.76c0.68,0,1.22,0.23,1.61,0.7c0.39,0.47,0.59,1.16,0.59,2.06v19.35c0,2.3-0.57,3.99-1.7,5.08c-1.14,1.09-2.88,1.63-5.23,1.63c-1.82,0-3.28-0.32-4.39-0.95c-1.11-0.63-1.67-1.59-1.67-2.88c0-0.63,0.21-1.13,0.64-1.5c0.43-0.37,0.98-0.55,1.67-0.55c0.5,0,0.93,0.13,1.27,0.38c0.34,0.25,0.6,0.58,0.78,0.98c0.18,0.43,0.41,0.74,0.7,0.95c0.29,0.2,0.59,0.3,0.89,0.3c0.96,0,1.6-0.31,1.93-0.93c0.33-0.62,0.49-1.66,0.49-3.12v-2.84H76.8c-0.51,0.91-1.05,1.52-1.65,1.84c-0.59,0.32-1.41,0.47-2.44,0.47c-1.01,0-1.84-0.21-2.48-0.62c-0.64-0.42-1.14-0.99-1.5-1.72c-0.35-0.73-0.6-1.56-0.74-2.5c-0.14-0.93-0.21-1.98-0.21-3.14V43.15z M72.64,47.06c0,2.27,0.13,3.8,0.4,4.58c0.27,0.78,0.79,1.17,1.57,1.17c0.66,0,1.2-0.36,1.63-1.08c0.43-0.72,0.64-2.01,0.64-3.88v-3.6c0-0.98-0.07-1.8-0.21-2.46c-0.14-0.66-0.32-1.17-0.53-1.53c-0.21-0.37-0.45-0.62-0.7-0.76c-0.25-0.14-0.51-0.21-0.76-0.21c-0.68,0-1.19,0.35-1.53,1.04c-0.34,0.7-0.51,1.85-0.51,3.47V47.06z"/>
+        <path class="st0" d="M86.4,29.31c0.52-0.52,1.14-0.78,1.87-0.78c0.73,0,1.36,0.26,1.88,0.78c0.52,0.52,0.78,1.14,0.78,1.88c0,0.73-0.26,1.36-0.78,1.88c-0.52,0.52-1.14,0.78-1.88,0.78c-0.73,0-1.36-0.26-1.87-0.78c-0.52-0.52-0.78-1.14-0.78-1.88C85.63,30.45,85.89,29.83,86.4,29.31z M85.97,38.23c0-0.91,0.2-1.6,0.61-2.06c0.4-0.47,0.97-0.7,1.7-0.7c0.73,0,1.3,0.23,1.7,0.7c0.4,0.47,0.61,1.16,0.61,2.06v15.95c0,0.91-0.2,1.6-0.61,2.06c-0.4,0.47-0.97,0.7-1.7,0.7c-0.73,0-1.3-0.23-1.7-0.7c-0.4-0.47-0.61-1.16-0.61-2.06V38.23z"/>
+        <path class="st0" d="M94.26,43.42c0-1.16,0.11-2.22,0.32-3.16c0.21-0.95,0.59-1.78,1.12-2.5c0.53-0.72,1.25-1.28,2.16-1.69c0.91-0.4,2.03-0.61,3.37-0.61c1.34,0,2.46,0.2,3.37,0.61c0.91,0.4,1.63,0.97,2.16,1.69c0.53,0.72,0.9,1.55,1.12,2.5c0.21,0.95,0.32,2,0.32,3.16v5.57c0,1.16-0.11,2.21-0.32,3.16c-0.21,0.95-0.59,1.78-1.12,2.5c-0.53,0.72-1.25,1.28-2.16,1.69c-0.91,0.4-2.03,0.61-3.37,0.61c-1.34,0-2.46-0.2-3.37-0.61c-0.91-0.4-1.63-0.97-2.16-1.69c-0.53-0.72-0.9-1.55-1.12-2.5c-0.21-0.95-0.32-2-0.32-3.16V43.42z M99.11,48.61c0,1.84,0.16,3.09,0.47,3.73c0.32,0.64,0.86,0.97,1.65,0.97c0.78,0,1.33-0.32,1.65-0.97c0.32-0.64,0.47-1.89,0.47-3.73v-4.89c0-1.77-0.17-2.98-0.51-3.64c-0.34-0.66-0.88-0.98-1.61-0.98c-0.73,0-1.27,0.33-1.61,0.98c-0.34,0.66-0.51,1.87-0.51,3.64V48.61z"/>
+        <path class="st1" d="M133.73,54.18c0,0.91-0.2,1.6-0.61,2.06c-0.4,0.47-0.97,0.7-1.7,0.7c-0.73,0-1.3-0.23-1.7-0.7c-0.4-0.47-0.61-1.16-0.61-2.06V41.64c0-0.71-0.16-1.24-0.49-1.61c-0.33-0.37-0.76-0.55-1.29-0.55c-0.76,0-1.34,0.3-1.76,0.91c-0.42,0.61-0.62,1.53-0.62,2.76v11.02c0,0.91-0.2,1.6-0.61,2.06c-0.4,0.47-0.97,0.7-1.7,0.7c-0.73,0-1.3-0.23-1.7-0.7c-0.4-0.47-0.61-1.16-0.61-2.06V41.64c0-0.71-0.16-1.24-0.49-1.61c-0.33-0.37-0.76-0.55-1.29-0.55c-0.76,0-1.34,0.3-1.76,0.91c-0.42,0.61-0.62,1.53-0.62,2.76v11.02c0,0.91-0.2,1.6-0.61,2.06c-0.4,0.47-0.97,0.7-1.7,0.7c-0.73,0-1.3-0.23-1.7-0.7c-0.4-0.47-0.61-1.16-0.61-2.06V38.23c0-0.91,0.2-1.6,0.61-2.06c0.4-0.47,0.97-0.7,1.7-0.7c1.54,0,2.31,0.88,2.31,2.65h0.08c0.35-0.86,0.93-1.51,1.72-1.97c0.8-0.45,1.66-0.68,2.59-0.68c1.03,0,1.87,0.17,2.5,0.51c0.63,0.34,1.17,0.94,1.63,1.8c0.68-0.86,1.38-1.46,2.08-1.8c0.71-0.34,1.55-0.51,2.54-0.51c1.34,0,2.41,0.42,3.22,1.27c0.81,0.85,1.21,2.12,1.21,3.81V54.18z"/>
+        <path class="st1" d="M150.58,52.05c0,0.53,0.05,1.21,0.15,2.04c0.08,0.51,0.11,0.85,0.11,1.02c0,1.21-0.77,1.82-2.31,1.82c-0.71,0-1.29-0.2-1.74-0.61c-0.45-0.4-0.68-1.07-0.68-2.01l-0.08,0.04c-0.4,0.88-0.98,1.53-1.72,1.95c-0.75,0.42-1.57,0.62-2.48,0.62c-1.44,0-2.59-0.45-3.47-1.36c-0.87-0.91-1.31-2.29-1.31-4.13c0-1.56,0.25-2.83,0.74-3.79c0.49-0.96,1.34-1.75,2.56-2.39l4.13-2.16c0.98-0.5,1.48-1.22,1.48-2.16c0-0.58-0.16-1.07-0.47-1.46c-0.32-0.39-0.75-0.59-1.31-0.59c-0.76,0-1.3,0.19-1.63,0.57c-0.33,0.38-0.54,1-0.64,1.86c-0.05,0.46-0.28,0.81-0.68,1.08c-0.4,0.27-0.91,0.4-1.52,0.4c-0.61,0-1.16-0.16-1.67-0.47c-0.51-0.32-0.76-0.79-0.76-1.42c0-1.72,0.61-3.05,1.84-4.01c1.22-0.96,2.76-1.44,4.6-1.44c1.49,0,2.69,0.15,3.62,0.45c0.92,0.3,1.62,0.73,2.08,1.27c0.47,0.54,0.78,1.16,0.93,1.86c0.15,0.69,0.23,1.52,0.23,2.48V52.05z M145.96,45.84l-1.63,1.14c-1.01,0.71-1.67,1.31-1.97,1.82c-0.3,0.5-0.45,1.2-0.45,2.08c0,0.76,0.15,1.35,0.44,1.78c0.29,0.43,0.69,0.64,1.19,0.64c0.73,0,1.32-0.36,1.76-1.08c0.44-0.72,0.66-1.63,0.66-2.75V45.84z"/>
+        <path class="st1" d="M165.09,35.96c1.59,0,2.39,0.53,2.39,1.59c0,0.38-0.06,0.73-0.17,1.04c-0.11,0.32-0.34,0.76-0.66,1.34l-7.31,12.5h5.95c1.54,0,2.31,0.66,2.31,1.97c0,1.36-0.77,2.04-2.31,2.04h-9.62c-1.49,0-2.23-0.64-2.23-1.93c0-0.38,0.06-0.72,0.17-1.02c0.11-0.3,0.27-0.64,0.47-1.02l7.31-12.5h-5.57c-1.54,0-2.31-0.66-2.31-1.97c0-1.36,0.77-2.04,2.31-2.04H165.09z"/>
+        <path class="st1" d="M181.22,35.96c1.59,0,2.39,0.53,2.39,1.59c0,0.38-0.06,0.73-0.17,1.04c-0.11,0.32-0.33,0.76-0.66,1.34l-7.31,12.5h5.95c1.54,0,2.31,0.66,2.31,1.97c0,1.36-0.77,2.04-2.31,2.04h-9.62c-1.49,0-2.23-0.64-2.23-1.93c0-0.38,0.06-0.72,0.17-1.02c0.11-0.3,0.27-0.64,0.47-1.02l7.31-12.5h-5.57c-1.54,0-2.31-0.66-2.31-1.97c0-1.36,0.77-2.04,2.31-2.04H181.22z"/>
+        <path class="st1" d="M199.67,52.05c0,0.53,0.05,1.21,0.15,2.04c0.08,0.51,0.11,0.85,0.11,1.02c0,1.21-0.77,1.82-2.31,1.82c-0.71,0-1.29-0.2-1.74-0.61c-0.46-0.4-0.68-1.07-0.68-2.01l-0.08,0.04c-0.4,0.88-0.98,1.53-1.72,1.95c-0.75,0.42-1.57,0.62-2.48,0.62c-1.44,0-2.59-0.45-3.47-1.36c-0.87-0.91-1.31-2.29-1.31-4.13c0-1.56,0.25-2.83,0.74-3.79c0.49-0.96,1.35-1.75,2.56-2.39l4.13-2.16c0.98-0.5,1.48-1.22,1.48-2.16c0-0.58-0.16-1.07-0.47-1.46c-0.32-0.39-0.75-0.59-1.31-0.59c-0.76,0-1.3,0.19-1.63,0.57c-0.33,0.38-0.54,1-0.64,1.86c-0.05,0.46-0.28,0.81-0.68,1.08c-0.4,0.27-0.91,0.4-1.51,0.4c-0.61,0-1.16-0.16-1.67-0.47c-0.5-0.32-0.76-0.79-0.76-1.42c0-1.72,0.61-3.05,1.84-4.01c1.22-0.96,2.76-1.44,4.6-1.44c1.49,0,2.7,0.15,3.62,0.45c0.92,0.3,1.62,0.73,2.08,1.27c0.47,0.54,0.78,1.16,0.93,1.86c0.15,0.69,0.23,1.52,0.23,2.48V52.05z M195.05,45.84l-1.63,1.14c-1.01,0.71-1.67,1.31-1.97,1.82c-0.3,0.5-0.46,1.2-0.46,2.08c0,0.76,0.15,1.35,0.44,1.78c0.29,0.43,0.69,0.64,1.19,0.64c0.73,0,1.32-0.36,1.76-1.08c0.44-0.72,0.66-1.63,0.66-2.75V45.84z"/>
+      </g>
+      <g>
+        <radialGradient id="lg1" cx="216.7376" cy="38.2877" r="33.8357" gradientUnits="userSpaceOnUse">
+          <stop offset="0" style="stop-color:#00A5E6"/>
+          <stop offset="1" style="stop-color:#00538D"/>
+        </radialGradient>
+        <path fill="url(#lg1)" d="M228.46,14.57c-15.87,4.5-27.08,13.96-25.04,21.13c0.42,1.48,1.37,2.74,2.74,3.78l-1.93,5.88l7.28-3.46c6.13,1.63,14.99,1.29,24.32-1.35c15.87-4.5,27.08-13.96,25.04-21.13C258.83,12.25,244.32,10.08,228.46,14.57z M236.49,37.52c-13.83,3.92-26.47,2.03-28.24-4.22c-1.77-6.25,8-14.49,21.83-18.41c13.82-3.92,26.47-2.03,28.24,4.22C260.09,25.36,250.32,33.6,236.49,37.52z"/>
+        <radialGradient id="lg2" cx="252.5089" cy="30.3972" r="39.1053" gradientUnits="userSpaceOnUse">
+          <stop offset="0" style="stop-color:#64C7F3"/>
+          <stop offset="1" style="stop-color:#006CB6"/>
+        </radialGradient>
+        <path fill="url(#lg2)" d="M201.13,17.79c-0.52,8,13.41,15.42,31.12,16.56c10.41,0.67,19.81-0.97,25.89-4.07l8.44,1.99l-3.36-5.75c1.21-1.4,1.93-2.95,2.03-4.59c0.52-8-13.41-15.42-31.12-16.57C216.42,4.22,201.65,9.78,201.13,17.79z M203.74,16.89c0.45-6.98,13.32-11.82,28.75-10.82c15.43,1,27.57,7.46,27.12,14.44c-0.45,6.97-13.32,11.82-28.75,10.82C215.43,30.33,203.29,23.86,203.74,16.89z"/>
+        <radialGradient id="lg3" cx="208.6717" cy="20.0516" r="36.6899" fx="203.7355" fy="21.738" gradientUnits="userSpaceOnUse">
+          <stop offset="0" style="stop-color:#DFF2FD"/>
+          <stop offset="1" style="stop-color:#009FE3"/>
+        </radialGradient>
+        <path fill="url(#lg3)" d="M224.02,2.05c-17.7,1.14-31.63,8.56-31.12,16.56c0.11,1.65,0.82,3.19,2.03,4.59l-3.36,5.75l8.43-1.99c6.08,3.1,15.48,4.74,25.89,4.07c17.7-1.15,31.63-8.56,31.12-16.56C256.49,6.47,241.72,0.91,224.02,2.05z M227.28,28.01c-15.43,1-28.3-3.85-28.75-10.82c-0.45-6.98,11.69-13.44,27.12-14.44c15.43-1,28.3,3.85,28.75,10.82C254.85,20.54,242.71,27.01,227.28,28.01z"/>
+      </g>
+    </svg>
+  </div>
+  <div class="topbar-right">
+    <button class="btn-back-home" id="btnBackHome" onclick="askBackHome()">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M8.5 2L3.5 7L8.5 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Cambia questionario
+    </button>
+    <span class="topbar-badge">Valutazione A.A. 2024–25</span>
+  </div>
+</nav>
+
+<!-- Modale conferma abbandono -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <div class="modal-icon">⚠️</div>
+    <div class="modal-title">Abbandonare il questionario?</div>
+    <div class="modal-desc">Le risposte inserite finora andranno perse. Sei sicuro di voler tornare alla selezione?</div>
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeModal()">Continua</button>
+      <button class="modal-confirm" onclick="confirmBackHome()">Sì, torna indietro</button>
+    </div>
+  </div>
+</div>
+
+<section id="landing">
+  <div class="landing-eyebrow">Questionari di valutazione</div>
+  <h1 class="landing-headline">La tua voce <em>migliora</em><br>il Collegio</h1>
+  <p class="landing-sub">Seleziona il questionario che vuoi compilare. Ogni risposta è anonima e ci aiuta concretamente a crescere insieme.</p>
+  <div class="quiz-grid" id="quizGrid"></div>
+  <button class="start-btn" id="startBtn" onclick="startSurvey()" disabled>Inizia &rarr;</button>
+</section>
+
+<section id="survey">
+  <div class="prog-header">
+    <div class="prog-meta">
+      <span class="prog-label" id="progLabel">—</span>
+      <span class="prog-fraction" id="progFraction">—</span>
+    </div>
+    <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+  </div>
+  <div id="surveyContent"></div>
+  <div class="hint" id="hint"></div>
+  <div class="nav-bar">
+    <button class="btn-prev" id="btnPrev" onclick="navigate(-1)">&#8592; Indietro</button>
+    <button class="btn-next" id="btnNext" onclick="navigate(1)">Avanti &#8594;</button>
+  </div>
+</section>
+
+<section id="completion">
+  <div class="comp-mark">✓</div>
+  <div class="comp-eyebrow">Questionario completato</div>
+  <h2 class="comp-title">Grazie per<br>il tuo contributo</h2>
+  <p class="comp-sub">Le tue risposte sono state registrate. Il tuo feedback è essenziale per migliorare ogni aspetto della vita al Collegio Mazza.</p>
+  <div class="comp-stats" id="compStats"></div>
+  <button class="btn-restart" onclick="restart()">Compila un altro questionario</button>
+</section>
+
+</div>
+<script>
+const S = {
+  // ══ STUDENTI ══
+  q1:{
+    title:'Questionario Corso',icon:'📚',time:'2 min',
+    desc:'Corsi & Workshop · Lingue e certificazioni',
+    tags:'Corsi & Workshop — Corsi di lingua e certificazione',
+    when:'Da somministrare a fine corso',
+    group:'Studenti',
+    sections:[{
+      title:'Valutazione del corso',eyebrow:'Fine corso',
+      questions:[
+        {id:'1_1',text:"L'organizzazione del corso (orari, materiali, comunicazioni) era adeguata?",type:'likert'},
+        {id:'1_2',text:'Il docente o facilitatore ha trasmesso i contenuti in modo chiaro ed efficace?',type:'likert'},
+        {id:'1_3',text:'Le attività proposte ti hanno coinvolto attivamente durante il corso?',type:'likert'},
+        {id:'1_4',text:'I contenuti acquisiti sono applicabili nella tua vita universitaria o lavorativa?',type:'likert'},
+        {id:'1_5',text:'Soddisfazione complessiva del corso?',type:'likert'},
+        {id:'1_open',text:'C\'è qualcosa che cambieresti o che ti è rimasto del corso? — Risposta facoltativa',type:'text'},
+      ]
+    }]
+  },
+  q2:{
+    title:'Questionario Evento',icon:'🎤',time:'2 min',
+    desc:'Conferenze, seminari, Career service',
+    tags:'Conferenze e seminari — Career service',
+    when:'Da somministrare a fine evento',
+    group:'Studenti',
+    sections:[{
+      title:"Valutazione dell'evento",eyebrow:'Fine evento',
+      questions:[
+        {id:'2_1',text:"L'organizzazione dell'evento (logistica, comunicazioni, spazi) era adeguata?",type:'likert'},
+        {id:'2_2',text:'Il relatore ha comunicato i contenuti in modo chiaro e coinvolgente?',type:'likert'},
+        {id:'2_3',text:"L'evento ha stimolato il tuo interesse e la tua partecipazione attiva?",type:'likert'},
+        {id:'2_4',text:"L'evento ti ha offerto spunti utili per il tuo percorso professionale o personale?",type:'likert'},
+        {id:'2_5',text:"Soddisfazione complessiva dell'evento?",type:'likert'},
+        {id:'2_open',text:'Vuoi condividere un pensiero sull\'evento o un suggerimento? — Risposta facoltativa',type:'text'},
+      ]
+    }]
+  },
+  q3:{
+    title:'Attività Studentesche',icon:'🤝',time:'2 min',
+    desc:'Attività studentesche e istituzionali',
+    tags:'Attività studentesche — Attività istituzionali',
+    when:'Da somministrare a fine anno',
+    group:'Studenti',
+    sections:[{
+      title:"Valutazione dell'attività",eyebrow:'Fine semestre / Fine anno',
+      questions:[
+        {id:'3_1',text:'Ti sei sentito/a protagonista e parte attiva nella gestione di questa attività?',type:'likert'},
+        {id:'3_2',text:'Hai avuto spazio per prendere iniziative e contribuire in modo autonomo?',type:'likert'},
+        {id:'3_3',text:"L'esperienza ti ha permesso di acquisire o sviluppare competenze concrete?",type:'likert'},
+        {id:'3_4',text:"Questa attività ha lasciato il segno nella tua crescita personale o nel tuo modo di vivere il Collegio?",type:'likert'},
+        {id:'3_5',text:"L'esperienza ti ha aiutato a costruire relazioni di valore con gli altri collegiali?",type:'likert'},
+        {id:'3_6',text:"Soddisfazione complessiva dell'attività?",type:'likert'},
+        {id:'3_open',text:'C\'è qualcosa di questa esperienza che vorresti raccontarci? — Risposta facoltativa',type:'text'},
+      ]
+    }]
+  },
+  q4:{
+    title:'Altre Attività',icon:'🗺️',time:'2 min',
+    desc:'Visite culturali, attività in rete e progetti',
+    tags:'Visite e uscite culturali — Attività in rete e progetti',
+    when:'Da somministrare a fine attività',
+    group:'Studenti',
+    sections:[{
+      title:"Valutazione dell'attività",eyebrow:'Fine attività',
+      questions:[
+        {id:'4_1',text:"L'attività era ben organizzata (tempi, comunicazioni, logistica)?",type:'likert'},
+        {id:'4_2',text:'Le modalità di svolgimento erano appropriate e coinvolgenti?',type:'likert'},
+        {id:'4_3',text:'Hai avuto la possibilità di partecipare attivamente?',type:'likert'},
+        {id:'4_4',text:"L'esperienza ha aggiunto valore al tuo percorso formativo o personale?",type:'likert'},
+        {id:'4_5',text:'Soddisfazione complessiva?',type:'likert'},
+        {id:'4_open',text:'Hai qualcosa che vorresti aggiungere su questa esperienza? — Risposta facoltativa',type:'text'},
+      ]
+    }]
+  },
+  q5:{
+    title:'Benessere & PCPC',icon:'🌱',time:'2 min',
+    desc:'Crescita personale e vita in Collegio',
+    tags:'Somministrato a fine anno accademico',
+    when:'Da somministrare a fine anno',
+    group:'Studenti',
+    sections:[{
+      title:'Benessere e crescita personale',eyebrow:'Fine anno',
+      questions:[
+        {id:'5_1',text:"Ti sei sentito/a a tuo agio nell'esprimere te stesso/a nel Collegio?",type:'likert'},
+        {id:'5_2',text:'Il Collegio ti ha aiutato a costruire relazioni significative e durature?',type:'likert'},
+        {id:'5_3',text:'Il PCPC è stato uno strumento efficace nel tuo percorso di crescita personale?',type:'likert'},
+        {id:'5_4',text:'I servizi di supporto psicologico (Spazio Ascolto) e personale (coaching) sono stati facilmente accessibili?',type:'likert'},
+        {id:'5_5',text:'Percepisci il Collegio come un ambiente pienamente inclusivo?',type:'likert'},
+        {id:'5_open',text:'Vuoi lasciarci qualche riflessione sul tuo percorso di quest\'anno? — Risposta facoltativa',type:'text'},
+      ]
+    }]
+  },
+  q6:{
+    title:'Staff & Personale',icon:'👥',time:'3 min',
+    desc:'Direttore, Segreteria, Manutentore, Custode',
+    tags:'Somministrato a fine anno accademico',
+    when:'Da somministrare a fine anno',
+    group:'Studenti',
+    sections:[
+      {
+        title:'Direttore',eyebrow:'1 di 4',
+        badge:{icon:'🎓',desc:'Direzione e coordinamento del Collegio'},
+        questions:[
+          {id:'6_1',text:'Era accessibile e disponibile al dialogo con gli studenti?',type:'likert'},
+          {id:'6_2',text:'Le comunicazioni erano chiare, tempestive e trasparenti?',type:'likert'},
+          {id:'6_3',text:'Ha supportato il tuo percorso individuale con attenzione?',type:'likert'},
+          {id:'6_4',text:'Ti sei sentito/a trattato/a in modo equo nelle situazioni problematiche?',type:'likert'},
+          {id:'6_5',text:'Soddisfazione complessiva del Direttore',type:'likert'},
+        ]
+      },
+      {
+        title:'Segreteria',eyebrow:'2 di 4',
+        badge:{icon:'🗂️',desc:'Gestione amministrativa e comunicazioni'},
+        questions:[
+          {id:'6_6',text:'Ha gestito le tue richieste in modo efficace e nei tempi giusti?',type:'likert'},
+          {id:'6_7',text:'Il personale era cortese e disponibile?',type:'likert'},
+          {id:'6_8',text:'Le pratiche amministrative (documenti, rimborsi, certificati) erano chiare?',type:'likert'},
+          {id:'6_9',text:'I canali di comunicazione (email, portale) erano comodi e funzionali?',type:'likert'},
+          {id:'6_10',text:'Soddisfazione complessiva della Segreteria',type:'likert'},
+        ]
+      },
+      {
+        title:'Manutentore',eyebrow:'3 di 4',
+        badge:{icon:'🔧',desc:'Interventi tecnici e manutenzione spazi'},
+        questions:[
+          {id:'6_11',text:'Gli interventi di manutenzione sono stati eseguiti in tempi ragionevoli?',type:'likert'},
+          {id:'6_12',text:'La qualità degli interventi era adeguata e risolutiva?',type:'likert'},
+          {id:'6_13',text:'Gli spazi comuni erano mantenuti in buono stato?',type:'likert'},
+          {id:'6_14',text:'Era facile segnalare un problema o un guasto?',type:'likert'},
+          {id:'6_15',text:'Soddisfazione complessiva del Manutentore',type:'likert'},
+        ]
+      },
+      {
+        title:'Custode Notturno',eyebrow:'4 di 4',
+        badge:{icon:'🌙',desc:'Sicurezza notturna e gestione emergenze'},
+        questions:[
+          {id:'6_16',text:'La sua presenza ti ha fatto sentire al sicuro nel Collegio?',type:'likert'},
+          {id:'6_17',text:'Era reperibile e disponibile in caso di necessità?',type:'likert'},
+          {id:'6_18',text:'Il comportamento era discreto e rispettoso della quiete?',type:'likert'},
+          {id:'6_19',text:'Ha gestito situazioni critiche con professionalità e prontezza?',type:'likert'},
+          {id:'6_20',text:'Soddisfazione complessiva del Custode Notturno',type:'likert'},
+          {id:'6_open',text:'C\'è qualcosa che vorresti condividere sullo staff del Collegio? — Risposta facoltativa',type:'text'},
+        ]
+      },
+    ]
+  },
+  // ══ DOCENTI ══
+  q7:{
+    title:'Questionario Corso',icon:'🎓',time:'2 min',
+    desc:'Feedback del docente / formatore',
+    tags:'Corsi & Workshop — Corsi di lingua e certificazione',
+    when:'Da somministrare a fine corso',
+    group:'Docenti',
+    sections:[{
+      title:'Valutazione del corso',eyebrow:'Fine corso — Docente',
+      questions:[
+        {id:'7_1',text:'La collaborazione con il referente del Collegio che ti ha seguito è stata chiara, efficace e ben organizzata?',type:'likert'},
+        {id:'7_2',text:'Le risorse, gli spazi e il supporto logistico messi a disposizione erano adeguati?',type:'likert'},
+        {id:'7_3',text:'La partecipazione e il coinvolgimento degli studenti erano soddisfacenti?',type:'likert'},
+        {id:'7_4',text:'Il corso ha raggiunto gli obiettivi formativi che ti eri prefissato/a?',type:'likert'},
+        {id:'7_5',text:'Valuteresti positivamente una futura collaborazione con il Collegio Mazza?',type:'likert'},
+        {id:'7_open',text:'C\'è qualcosa che avrebbe potuto rendere questa collaborazione più efficace? — Risposta facoltativa',type:'text'},
+      ]
+    }]
+  },
+  q8:{
+    title:'Questionario Evento',icon:'🎤',time:'2 min',
+    desc:'Feedback del relatore / ospite',
+    tags:'Conferenze e seminari — Career service',
+    when:'Da somministrare a fine evento',
+    group:'Docenti',
+    sections:[{
+      title:"Valutazione dell'evento",eyebrow:'Fine evento — Relatore',
+      questions:[
+        {id:'8_1',text:'Com\'è andata la progettazione dell\'evento con il referente del Collegio con cui ti sei interfacciato/a?',type:'likert'},
+        {id:'8_2',text:'Come valuti l\'aspetto logistico dell\'evento: gestione dei tempi, comunicazione e materiali a disposizione?',type:'likert'},
+        {id:'8_3',text:'La partecipazione del pubblico era attiva e soddisfacente?',type:'likert'},
+        {id:'8_4',text:"L'evento ha raggiunto gli obiettivi formativi o culturali previsti?",type:'likert'},
+        {id:'8_5',text:'Valuteresti positivamente una futura collaborazione con il Collegio Mazza?',type:'likert'},
+        {id:'8_open',text:'Hai suggerimenti per migliorare la gestione di eventi futuri? — Risposta facoltativa',type:'text'},
+      ]
+    }]
+  }
+};
+
+let cur=null,sec=0,ans={},t0=null;
+
+(function(){
+  const g=document.getElementById('quizGrid');
+  let lastGroup=null;
+  Object.entries(S).forEach(([k,s])=>{
+    if(s.group!==lastGroup){
+      lastGroup=s.group;
+      const lbl=document.createElement('div');
+      lbl.className='group-label';
+      lbl.innerHTML=`<span>${s.group==='Studenti'?'👩‍🎓':'👩‍🏫'} ${s.group}</span>`;
+      g.appendChild(lbl);
+    }
+    const d=document.createElement('div');
+    d.className='quiz-card';d.dataset.k=k;
+    d.innerHTML=`<div class="qc-icon">${s.icon}</div>
+      <div class="qc-body">
+        <div class="qc-name">${s.title}</div>
+        <div class="qc-desc">${s.desc}</div>
+        <div class="qc-tags">${s.tags}</div>
+        <span class="qc-time">⏱ ${s.when}</span>
+      </div>
+      <div class="qc-check">✓</div>`;
+    d.addEventListener('click',()=>{
+      document.querySelectorAll('.quiz-card').forEach(x=>x.classList.remove('active'));
+      d.classList.add('active');cur=k;
+      document.getElementById('startBtn').disabled=false;
+    });
+    g.appendChild(d);
+  });
+})();
+
+function render(){
+  const sv=S[cur],s=sv.sections[sec],total=sv.sections.length;
+  const pct=Math.round((sec/total)*100);
+  document.getElementById('progFill').style.width=pct+'%';
+  document.getElementById('progLabel').textContent=s.eyebrow||`Sezione ${sec+1} di ${total}`;
+  document.getElementById('progFraction').textContent=`${sec+1} / ${total}`;
+  const c=document.getElementById('surveyContent');c.innerHTML='';
+  const h=document.createElement('div');h.className='sec-head';
+  h.innerHTML=`<div class="sec-eyebrow">${s.eyebrow||''}</div><div class="sec-title">${s.title}</div>`;
+  c.appendChild(h);
+  if(s.badge){
+    const b=document.createElement('div');b.className='staff-badge';
+    b.innerHTML=`<span class="sb-icon">${s.badge.icon}</span><div><div class="sb-role">${s.title}</div><div class="sb-desc">${s.badge.desc}</div></div>`;
+    c.appendChild(b);
+    const n=document.createElement('div');n.className='info-note';
+    n.innerHTML='<span>💡</span><span>Se non hai interagito con questa figura, seleziona "Non ho interagito" per le domande non pertinenti.</span>';
+    c.appendChild(n);
+  }
+  s.questions.forEach((q,i)=>{
+    const qx = s.badge ? {...q, allowNA:true} : q;
+    const card=document.createElement('div');
+    card.className='q-card'+(qx.type==='text'?' q-text-card':'');card.id='qc_'+qx.id;card.style.animationDelay=(i*.06)+'s';
+    if(qx.type==='text'){
+      card.innerHTML=`<div class="q-input">${buildInput(qx)}</div>`;
+    } else {
+      card.innerHTML=`<div class="q-num">Domanda ${i+1}</div><div class="q-text">${qx.text}</div><div class="q-input">${buildInput(qx)}</div>`;
+    }
+    c.appendChild(card);attach(card,qx);
+  });
+  document.getElementById('btnPrev').style.visibility=sec===0?'hidden':'visible';
+  document.getElementById('btnNext').textContent=sec===total-1?'Invia ✓':'Avanti →';
+  document.getElementById('hint').textContent='';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function buildInput(q){
+  if(q.type==='likert'){
+    const lb=q.labels||['Per nulla','Poco','Abbastanza','Molto','Moltissimo'];
+    const naBtn=q.allowNA?`<div class="na-row"><div class="na-btn ${ans[q.id]==='na'?'na-sel':''}" data-id="${q.id}" data-na="1">— Non ho interagito</div></div>`:'';
+    return`<div class="likert-row">${[1,2,3,4,5].map(v=>`<div class="l-opt ${ans[q.id]==v?'sel-'+v:''}" data-id="${q.id}" data-v="${v}"><span class="l-num">${v}</span><span class="l-lbl">${lb[v-1]}</span></div>`).join('')}</div>${naBtn}`;
+  }
+  if(q.type==='nps'){
+    const naBtn=q.allowNA?`<div class="na-row"><div class="na-btn ${ans[q.id]==='na'?'na-sel':''}" data-id="${q.id}" data-na="1">— Non ho interagito</div></div>`:'';
+    return`<div class="nps-row">${[0,1,2,3,4,5,6,7,8,9,10].map(v=>{
+      let cls='';if(ans[q.id]===v){cls=v<=4?'nsel nsel-low':v<=6?'nsel nsel-mid':'nsel nsel-high';}
+      return`<div class="nps-opt ${cls}" data-id="${q.id}" data-nps="${v}">${v}</div>`;
+    }).join('')}</div><div class="nps-labels"><span>Non consiglierei</span><span>Neutro</span><span>Ottimo</span></div>${naBtn}`;
+  }
+  if(q.type==='mc'){
+    return`<div class="mc-row">${q.opts.map(o=>`<div class="mc-opt ${ans[q.id]===o?'msel':''}" data-id="${q.id}" data-mc="${o}">${o}</div>`).join('')}</div>`;
+  }
+  if(q.type==='yn'){
+    return`<div class="yn-row"><div class="yn-opt yn-si ${ans[q.id]==='si'?'ysel':''}" data-id="${q.id}" data-yn="si">✓ Sì</div><div class="yn-opt yn-no ${ans[q.id]==='no'?'ysel':''}" data-id="${q.id}" data-yn="no">✗ No</div><div class="yn-opt yn-na ${ans[q.id]==='na'?'ysel':''}" data-id="${q.id}" data-yn="na">— Non ho interagito</div></div>`;
+  }
+  if(q.type==='text'){
+    const val=ans[q.id]||'';
+    const cleanText=q.text.replace(' — Risposta facoltativa','');
+    return`<div class="open-top">
+        <div class="open-icon-wrap">💬</div>
+        <div class="open-header">
+          <div class="open-badge">✦ Facoltativa</div>
+          <div class="open-prompt">${cleanText}</div>
+        </div>
+      </div>
+      <div class="open-wrap">
+        <textarea class="open-ta" data-id="${q.id}" placeholder="Scrivi liberamente — ogni parola ci aiuta a migliorare…" maxlength="600">${val}</textarea>
+        <div class="open-footer">
+          <span class="open-hint">Le risposte sono anonime</span>
+          <span class="open-counter" id="cnt_${q.id}">${val.length}/600</span>
+        </div>
+      </div>`;
+  }
+  return '';
+}
+
+function attach(card,q){
+  if(q.type==='likert'){
+    card.querySelectorAll('.l-opt').forEach(el=>{
+      el.addEventListener('click',()=>{
+        ans[q.id]=parseInt(el.dataset.v);
+        card.querySelectorAll('.l-opt').forEach(x=>x.className='l-opt');
+        card.querySelectorAll('.na-btn').forEach(x=>x.classList.remove('na-sel'));
+        el.classList.add('sel-'+el.dataset.v);upd();
+      });
+    });
+  }
+  if(q.type==='nps'){
+    card.querySelectorAll('.nps-opt').forEach(el=>{
+      el.addEventListener('click',()=>{
+        const v=parseInt(el.dataset.nps);ans[q.id]=v;
+        card.querySelectorAll('.nps-opt').forEach(x=>x.className='nps-opt');
+        card.querySelectorAll('.na-btn').forEach(x=>x.classList.remove('na-sel'));
+        el.classList.add('nsel',v<=4?'nsel-low':v<=6?'nsel-mid':'nsel-high');upd();
+      });
+    });
+  }
+  if(q.allowNA){
+    const naEl=card.querySelector('.na-btn');
+    if(naEl) naEl.addEventListener('click',()=>{
+      ans[q.id]='na';
+      card.querySelectorAll('.l-opt').forEach(x=>x.className='l-opt');
+      card.querySelectorAll('.nps-opt').forEach(x=>x.className='nps-opt');
+      naEl.classList.add('na-sel');upd();
+    });
+  }
+  if(q.type==='mc'){
+    card.querySelectorAll('.mc-opt').forEach(el=>{
+      el.addEventListener('click',()=>{
+        ans[q.id]=el.dataset.mc;
+        card.querySelectorAll('.mc-opt').forEach(x=>x.classList.remove('msel'));
+        el.classList.add('msel');upd();
+      });
+    });
+  }
+  if(q.type==='yn'){
+    card.querySelectorAll('.yn-opt').forEach(el=>{
+      el.addEventListener('click',()=>{
+        ans[q.id]=el.dataset.yn;
+        card.querySelectorAll('.yn-opt').forEach(x=>x.classList.remove('ysel'));
+        el.classList.add('ysel');upd();
+      });
+    });
+  }
+}
+  if(q.type==='text'){
+    const ta=card.querySelector('.open-ta');
+    if(ta){
+      ta.addEventListener('input',()=>{
+        ans[q.id]=ta.value;
+        const cnt=document.getElementById('cnt_'+q.id);
+        if(cnt) cnt.textContent=ta.value.length+'/600';
+      });
+    }
+  }
+
+function upd(){
+  const s=S[cur].sections[sec];
+  const missing=s.questions.filter(q=>q.type!=='text'&&ans[q.id]===undefined).length;
+  document.getElementById('hint').textContent='';
+  const pct=Math.round(((sec+(missing===0?1:.5))/S[cur].sections.length)*100);
+  document.getElementById('progFill').style.width=pct+'%';
+}
+
+function navigate(dir){
+  if(dir===1){
+    const s=S[cur].sections[sec];
+    const missing=s.questions.filter(q=>q.type!=='text'&&ans[q.id]===undefined);
+    if(missing.length){
+      document.getElementById('hint').textContent=`⚠ Rispondi a tutte le domande per continuare (${missing.length} mancante${missing.length>1?'':''})`
+      missing.forEach(q=>{
+        const c=document.getElementById('qc_'+q.id);
+        if(c){c.classList.add('unanswered');setTimeout(()=>c.classList.remove('unanswered'),500);}
+      });
+      return;
+    }
+    if(sec<S[cur].sections.length-1){sec++;render();}
+    else done();
+  } else {
+    if(sec>0){sec--;render();}
+  }
+}
+
+function startSurvey(){
+  if(!cur)return;
+  sec=0;ans={};t0=Date.now();
+  document.getElementById('landing').style.display='none';
+  document.getElementById('survey').style.display='block';
+  document.getElementById('btnBackHome').style.display='flex';
+  render();
+}
+
+function askBackHome(){
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal(){
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+
+function confirmBackHome(){
+  closeModal();
+  restart();
+}
+
+function done(){
+  document.getElementById('survey').style.display='none';
+  const comp=document.getElementById('completion');
+  comp.style.display='flex';
+  const mins=Math.max(1,Math.round((Date.now()-t0)/60000));
+  const total=Object.keys(ans).length;
+  document.getElementById('compStats').innerHTML=`
+    <div class="stat-item"><div class="stat-n">${total}</div><div class="stat-l">Risposte</div></div>
+    <div class="stat-item"><div class="stat-n">${mins}'</div><div class="stat-l">Tempo</div></div>
+    <div class="stat-item"><div class="stat-n">100%</div><div class="stat-l">Completato</div></div>`;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function restart(){
+  cur=null;sec=0;ans={};
+  document.querySelectorAll('.quiz-card').forEach(x=>x.classList.remove('active'));
+  document.getElementById('startBtn').disabled=true;
+  document.getElementById('completion').style.display='none';
+  document.getElementById('survey').style.display='none';
+  document.getElementById('landing').style.display='flex';
+  document.getElementById('btnBackHome').style.display='none';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
